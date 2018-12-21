@@ -7,7 +7,6 @@
   <ItemGroup>
     <Folder Include="Dao\" />
     <Folder Include="Dto\" />
-    <Folder Include="ViewModel\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +36,10 @@ namespace WebApi
                     Title = "api",
                     Version = "v1"
                 });
+                foreach (var path in GetXmlCommentsPaths())
+                {
+                    c.IncludeXmlComments(path);
+                }
             });
         }
 
@@ -51,6 +57,12 @@ namespace WebApi
             }
 
             app.UseMvc();
+        }
+
+        private static string[] GetXmlCommentsPaths()
+        {
+            var searchFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
+            return Directory.EnumerateFiles(searchFolder, "*.xml", SearchOption.AllDirectories).ToArray();
         }
     }
 }
