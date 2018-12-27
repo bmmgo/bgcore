@@ -4,9 +4,4 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Dto\" />
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
-
 </Project>

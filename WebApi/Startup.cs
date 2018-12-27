@@ -4,13 +4,18 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.XPath;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Dal;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Service;
 using Swashbuckle;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -26,21 +31,31 @@ namespace WebApi
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSwaggerGen(c =>
+            if (services.BuildServiceProvider().GetService<IHostingEnvironment>().IsDevelopment())
             {
-                c.SwaggerDoc("v1", new Info
+                services.AddSwaggerGen(c =>
                 {
-                    Title = "api",
-                    Version = "v1"
+                    c.SwaggerDoc("v1", new Info
+                    {
+                        Title = "api",
+                        Version = "v1"
+                    });
+                    foreach (var path in GetXmlCommentsPaths())
+                    {
+                        c.IncludeXmlComments(path);
+                    }
                 });
-                foreach (var path in GetXmlCommentsPaths())
-                {
-                    c.IncludeXmlComments(path);
-                }
-            });
+            }
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+            builder.RegisterType<ControllerBase>().AsSelf();
+            builder.RegisterAssemblyTypes(typeof(UserService).Assembly).AsSelf().AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(typeof(UserDa).Assembly).AsSelf().AsImplementedInterfaces();
+            var container = builder.Build();
+            return new AutofacServiceProvider(container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
