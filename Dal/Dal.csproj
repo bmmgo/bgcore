@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="DapperExtensions.NetCore" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DI\DI.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>

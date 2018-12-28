@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Dapper;
 using Model.Dao;
 
 namespace Dal
 {
-    public class UserDa : BaseDal
+    public class UserDa : BaseDal<User>
     {
-        public User SelectByUserId(string userId)
+        public List<User> SelectUsers(int count)
         {
-            return new User
+            using (var conn = GetConnection())
             {
-                UserId = userId,
-                Nick = "admin",
-                CreateTime = DateTime.Now
-            };
+                return conn.Query<User>($"select top {count} * from [User] order by CreateTime desc").ToList();
+            }
         }
     }
 }
