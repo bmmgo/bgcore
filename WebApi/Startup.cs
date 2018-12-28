@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.XPath;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Dal;
+using DI.Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +23,7 @@ using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebApi
 {
+    [DependsOn(nameof(Service))]
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -49,13 +52,7 @@ namespace WebApi
                     }
                 });
             }
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-            builder.RegisterType<ControllerBase>().AsSelf();
-            builder.RegisterAssemblyTypes(typeof(UserService).Assembly).AsSelf().AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(typeof(UserDa).Assembly).AsSelf().AsImplementedInterfaces();
-            var container = builder.Build();
-            return new AutofacServiceProvider(container);
+            return services.UseIoc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

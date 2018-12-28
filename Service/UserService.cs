@@ -1,10 +1,9 @@
-﻿using System;
-using Dal;
+﻿using Dal;
 using Model.Dao;
 
 namespace Service
 {
-    public class UserService
+    public class UserService : BaseService
     {
         private readonly UserDa _userDa;
         public UserService(UserDa userDa)
@@ -14,12 +13,7 @@ namespace Service
 
         public User GetUser(string userId)
         {
-            return new User
-            {
-                UserId = userId,
-                Nick = "admin",
-                CreateTime = DateTime.Now
-            };
+            return _userDa.SelectByUserId(userId);
         }
     }
 }
