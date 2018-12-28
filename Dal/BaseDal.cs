@@ -9,7 +9,7 @@ namespace Dal
     {
         public IDbConnection GetConnection()
         {
-            return new SqlConnection("Data Source = .;Initial Catalog = db;User Id = dev;Password = dev;");
+            return new SqlConnection("Data Source = db.bmmgo.com;Initial Catalog = bgcore;User Id = bgcore;Password = bgcore;");
         }
     }
 
