@@ -10,12 +10,11 @@ namespace DI.Autofac
 {
     public static class AutofacBuilderHelper
     {
-        public static IServiceProvider UseIoc(this IServiceCollection services)
+        public static IServiceProvider UseIoc(this IServiceCollection services, Type entryType)
         {
             var builder = new ContainerBuilder();
             builder.Populate(services);
-            var assembly = Assembly.GetCallingAssembly();
-            RegisterTypes(assembly, builder);
+            RegisterTypes(entryType.Assembly, builder);
             var container = builder.Build();
             return new AutofacServiceProvider(container);
         }
@@ -28,7 +27,7 @@ namespace DI.Autofac
                 var dependency = type.GetCustomAttribute<DependsOnAttribute>();
                 if (dependency != null)
                 {
-                    RegisterTypes(Assembly.Load(dependency.AssemblyName), builder);
+                    RegisterTypes(dependency.Type.Assembly, builder);
                 }
             }
             builder.RegisterAssemblyTypes(assembly)

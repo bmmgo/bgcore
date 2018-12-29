@@ -5,10 +5,10 @@ namespace DI.Autofac
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public class DependsOnAttribute : Attribute
     {
-        public string AssemblyName { get; }
-        public DependsOnAttribute(string assemblyName)
+        public Type Type { get; }
+        public DependsOnAttribute(Type type)
         {
-            AssemblyName = assemblyName;
+            Type = type;
         }
     }
 }
