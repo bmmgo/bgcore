@@ -5,11 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dto\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\BgDapper\BgDapper.csproj" />
+    <PackageReference Include="Dapper" Version="1.50.5" />
   </ItemGroup>
 
 </Project>
